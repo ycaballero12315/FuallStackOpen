@@ -1,1 +1,1 @@
-# FuallStackOpen
+# FullStackOpen
