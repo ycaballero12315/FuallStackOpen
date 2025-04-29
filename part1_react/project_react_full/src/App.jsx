@@ -1,29 +1,42 @@
 import { useState } from "react";
 
-const course = "Half Stack application development";
-
-const partcourse = [
-  { name: "Fundamentals of React" },
-  { name: "Using props to pass data" },
-  { name: "State of a component" },
-];
-
-const cantejerc = [{ cantidad: 10 }, { cantidad: 7 }, { cantidad: 14 }];
+const course = {
+  name: "Half Stack application development",
+  parts: [
+    {
+      name: "Fundamentals of React",
+      exercises: 10,
+    },
+    {
+      name: "Using props to pass data",
+      exercises: 7,
+    },
+    {
+      name: "State of a component",
+      exercises: 14,
+    },
+  ],
+};
 
 const Header = (props) => {
-  return <p>{props.course}</p>;
+  console.log(props);
+  return <p>{props.course.name}</p>;
 };
 
-const Content = ({ partcourse }) => {
-  return partcourse.map((item, index) => (
-    <p key={index}>
-      {index + 1} : {item.name}
-    </p>
-  ));
+const Content = ({ course }) => {
+  return (
+    <>
+      {course.parts.map((item, index) => (
+        <p key={item.name}>
+          {index + 1}: {item.name} - cantidad de ejercicios: {item.exercises}
+        </p>
+      ))}
+    </>
+  );
 };
 
-const Total = ({ cantejerc }) => {
-  const sum = cantejerc.reduce((acc, item) => acc + item.cantidad, 0);
+const Total = ({ course }) => {
+  const sum = course.parts.reduce((acc, item) => acc + item.exercises, 0);
   return <p>El total de la suma de ejercicios es: {sum}</p>;
 };
 
@@ -34,9 +47,9 @@ const App = () => {
         <h2>
           <Header course={course}></Header>
         </h2>
-        <Content partcourse={partcourse}></Content>
+        <Content course={course}></Content>
         <br />
-        <Total cantejerc={cantejerc}></Total>
+        <Total course={course}></Total>
       </div>
     </>
   );
