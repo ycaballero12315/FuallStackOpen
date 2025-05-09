@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useEffect, useState } from "react";
 
 const course = {
   name: "Half Stack application development",
@@ -71,6 +71,18 @@ const Counter = () => {
   );
 };
 
+const CounterAutomatic = () => {
+  const [count, setCount] = useState(0);
+
+  console.log("renderizando", count);
+  return (
+    <div>
+      <p>{count}</p>
+      <button onClick={() => setCount(count + 1)}>pluss</button>
+    </div>
+  );
+};
+
 const MostrarTexto = () => {
   const [visible, setVisible] = useState(false);
   return (
@@ -100,15 +112,29 @@ const Formulario = () => {
 };
 
 const Semaforo = () => {
-  const [colorActivo, setColor] = useState("");
-  const [colorFondo, setColorFondo] = useState({});
+  const colores = ["red", "yellow", "green"];
+  const [indice, setIndice] = useState(0);
+  const [activo, setActivo] = useState(false);
+  const refActive = useRef(null);
+
+  useEffect(() => {
+    if (activo) {
+      refActive.current = setInterval(() => {
+        setIndice((prev) => (prev + 1) % colores.length);
+      }, 2000);
+    } else {
+      return () => clearInterval(refActive.current);
+    }
+
+    return () => clearInterval(refActive.current);
+  }, [activo]);
 
   const getEstilo = (color) => ({
     width: "60px",
     height: "60px",
     borderRadius: "50%",
     margin: "10px",
-    backgroundColor: colorActivo === color ? color : "gray",
+    backgroundColor: colores[indice] === color ? color : "gray",
     border: "2px solid black",
   });
 
@@ -128,39 +154,16 @@ const Semaforo = () => {
       </div>
 
       {/* Semaforo */}
-      <div style={{ marginTop: "20px" }}>
-        <h2>Semaforo</h2>
-        <button
-          onClick={() => {
-            setColor("red");
-            setColorFondo({ backgroundColor: "red" });
-          }}
-        >
-          Rojo
-        </button>
-        <button
-          onClick={() => {
-            setColor("yellow");
-            setColorFondo({ backgroundColor: "yellow" });
-          }}
-        >
-          Amarillo
-        </button>
-        <button
-          onClick={() => {
-            setColor("green");
-            setColorFondo({ backgroundColor: "green" });
-          }}
-        >
-          Verde
-        </button>
-        {colorActivo && (
-          <p style={{ padding: "10px", color: "black", ...colorFondo }}>
-            El color activo es:
-            <strong>{colorActivo}</strong>
-          </p>
-        )}
-      </div>
+      <p style={{ marginTop: "20px" }}>
+        Color actual: <strong>{colores[indice]}</strong>
+      </p>
+      {/* Botón de control */}
+      <button
+        onClick={() => setActivo(!activo)}
+        style={{ marginTop: "10px", padding: "10px 20px" }}
+      >
+        {activo ? "Pausar" : "Iniciar"}
+      </button>
     </div>
   );
 };
@@ -179,6 +182,7 @@ const App = () => {
         <Edad birthYear={1983} birthDay={31} birthMonth={12}></Edad>
       </div>
       <Counter></Counter>
+      <CounterAutomatic></CounterAutomatic>
       <MostrarTexto></MostrarTexto>
       <br />
       <Formulario></Formulario>
