@@ -103,39 +103,64 @@ const Semaforo = () => {
   const [colorActivo, setColor] = useState("");
   const [colorFondo, setColorFondo] = useState({});
 
+  const getEstilo = (color) => ({
+    width: "60px",
+    height: "60px",
+    borderRadius: "50%",
+    margin: "10px",
+    backgroundColor: colorActivo === color ? color : "gray",
+    border: "2px solid black",
+  });
+
   return (
-    <div>
-      <h2>Semaforo</h2>
-      <button
-        onClick={() => {
-          setColor("Rojo");
-          setColorFondo({ backgroundColor: "red" });
+    <div style={{ textAlign: "center" }}>
+      {/* Círculos */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        Rojo
-      </button>
-      <button
-        onClick={() => {
-          setColor("Amarillo");
-          setColorFondo({ backgroundColor: "yellow" });
-        }}
-      >
-        Amarillo
-      </button>
-      <button
-        onClick={() => {
-          setColor("Verde");
-          setColorFondo({ backgroundColor: "green" });
-        }}
-      >
-        Verde
-      </button>
-      {colorActivo && (
-        <p style={{ padding: "10px", color: "black", ...colorFondo }}>
-          El color activo es:
-          <strong>{colorActivo}</strong>
-        </p>
-      )}
+        <div style={getEstilo("red")}></div>
+        <div style={getEstilo("yellow")}></div>
+        <div style={getEstilo("green")}></div>
+      </div>
+
+      {/* Semaforo */}
+      <div style={{ marginTop: "20px" }}>
+        <h2>Semaforo</h2>
+        <button
+          onClick={() => {
+            setColor("red");
+            setColorFondo({ backgroundColor: "red" });
+          }}
+        >
+          Rojo
+        </button>
+        <button
+          onClick={() => {
+            setColor("yellow");
+            setColorFondo({ backgroundColor: "yellow" });
+          }}
+        >
+          Amarillo
+        </button>
+        <button
+          onClick={() => {
+            setColor("green");
+            setColorFondo({ backgroundColor: "green" });
+          }}
+        >
+          Verde
+        </button>
+        {colorActivo && (
+          <p style={{ padding: "10px", color: "black", ...colorFondo }}>
+            El color activo es:
+            <strong>{colorActivo}</strong>
+          </p>
+        )}
+      </div>
     </div>
   );
 };
